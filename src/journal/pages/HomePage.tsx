@@ -2,7 +2,7 @@ import { type ReactElement, useEffect, useState } from 'react';
 import axios from 'axios';
 interface INews {
   title: string;
-  description: string;
+  summary: string;
 }
 
 export const HomePage = (): ReactElement => {
@@ -12,11 +12,23 @@ export const HomePage = (): ReactElement => {
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       const response = await axios.get(
-        'https://newsapi.org/v2/top-headlines?country=us&apiKey=f8905f1c83fb4c43b8ba8eed4ad83c32'
+        'https://api.newscatcherapi.com/v2/search',
+        {
+          params: {
+            q: 'Bitcoin',
+            lang: 'en',
+            sort_by: 'relevancy',
+            page: '1',
+          },
+          headers: {
+            'x-api-key': 'pzflooiZkigZv3RHkvyQWg6cm9vbbEjkbqkIU4of_D8',
+          },
+        }
       );
       setNews(response.data.articles);
       setLoading(false);
     };
+
     fetchData()
       .then(() => {
         console.log('Successfully request');
@@ -37,7 +49,7 @@ export const HomePage = (): ReactElement => {
           {news.map((article, index) => (
             <li key={index}>
               <h3>{article.title}</h3>
-              <p>{article.description}</p>
+              <p>{article.summary}</p>
             </li>
           ))}
         </ul>
